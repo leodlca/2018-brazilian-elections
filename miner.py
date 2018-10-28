@@ -1,4 +1,4 @@
-import twitter, re, threading, datetime, glob, json, pandas as pd
+import twitter, re, threading, datetime, glob, json, random, pandas as pd
 
 class TwitterMiner():
     request_limit = 20
@@ -41,14 +41,15 @@ class TwitterMiner():
 
 def save_as_csv(dataset):
     df = pd.DataFrame(dataset)
-    now = str(int(datetime.datetime.now().timestamp()))
+    now = str(int(datetime.datetime.now().timestamp())) + str(random.randint(1,100001))
     df.to_csv('./csv/' + now + '.csv')
     
 def iterator():
     py_twitter = TwitterMiner()
-    threading.Timer(5.0, iterator).start()
-    data = py_twitter.mine_tweets_by_keyword(term='eleicoes2018', result_type='recent', since='2018-10-06')
+    threading.Timer(10.0, iterator).start()
+    data = py_twitter.mine_tweets_by_keyword(term='bolsonaro', result_type='recent', since='2018-10-25')
     save_as_csv(data)
+    data2 = py_twitter.mine_tweets_by_keyword(term='haddad', result_type='recent', since='2018-10-25')
     print('Completed an iteration at {0}!'.format(datetime.datetime.now().timestamp()))
 
 iterator()
